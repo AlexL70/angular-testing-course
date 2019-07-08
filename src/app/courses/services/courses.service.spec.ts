@@ -3,6 +3,7 @@ import { CoursesService } from './courses.service';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Course } from '../model/course';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe(`${CoursesService.name}`, () => {
   let coursesService: CoursesService;
@@ -64,5 +65,19 @@ describe(`${CoursesService.name}`, () => {
       ...COURSES[12],
       ...changes
     });
+  });
+
+  it('should give an error when save course fails', () => {
+    const changes: Partial<Course> = { titles: { description: 'Testing course of Angular'} };
+    coursesService.saveCourse(12, changes)
+      .subscribe(() => fail(`the "${coursesService.saveCourse.name}" operation should have failed`),
+      (error: HttpErrorResponse) => {
+        expect(error.status).toBe(500);
+      });
+
+    const req = httpTestingController.expectOne('/api/courses/12', `Wrong URL for ${coursesService.saveCourse.name}`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body.titles.description).toBe(changes.titles.description);
+    req.flush('Save course failed', { status: 500, statusText: 'Internal server error'});
   });
 });
