@@ -20,6 +20,10 @@ describe(`${CoursesService.name}`, () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
+  afterEach(() => {
+    httpTestingController.verify();
+  });
+
   it('should retrieve all courses', () => {
     coursesService.findAllCourses().subscribe(courses => {
       expect(courses).toBeTruthy('No courses returned');
@@ -31,5 +35,16 @@ describe(`${CoursesService.name}`, () => {
     const req = httpTestingController.expectOne('/api/courses', 'Wrong URL for all courses');
     expect(req.request.method).toBe('GET', 'Wrong request verb');
     req.flush({payload: Object.values(COURSES)});
+  });
+
+  it('should find a course by id', () => {
+    coursesService.findCourseById(12).subscribe(course => {
+      expect(course).toBeTruthy();
+      expect(course.id).toBe(12);
+    });
+
+    const req = httpTestingController.expectOne('/api/courses/12', 'Wrong URL for course');
+    expect(req.request.method).toBe('GET', 'Wrong request werb');
+    req.flush(COURSES[12]);
   });
 });
