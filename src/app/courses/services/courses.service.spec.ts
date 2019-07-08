@@ -2,6 +2,7 @@ import { COURSES } from './../../../../server/db-data';
 import { CoursesService } from './courses.service';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Course } from '../model/course';
 
 describe(`${CoursesService.name}`, () => {
   let coursesService: CoursesService;
@@ -46,5 +47,22 @@ describe(`${CoursesService.name}`, () => {
     const req = httpTestingController.expectOne('/api/courses/12', 'Wrong URL for course');
     expect(req.request.method).toBe('GET', 'Wrong request werb');
     req.flush(COURSES[12]);
+  });
+
+  it('should save the course datad', () => {
+    const changes: Partial<Course> = { titles: { description: 'Testing course of Angular'} };
+    coursesService.saveCourse(12, changes)
+      .subscribe(course => {
+        expect(course).toBeTruthy();
+        expect(course.id).toBe(12);
+      });
+
+    const req = httpTestingController.expectOne('/api/courses/12', `Wrong URL for ${coursesService.saveCourse.name}`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body.titles.description).toBe(changes.titles.description);
+    req.flush({
+      ...COURSES[12],
+      ...changes
+    });
   });
 });
