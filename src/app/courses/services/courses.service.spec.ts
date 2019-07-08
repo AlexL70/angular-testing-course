@@ -1,4 +1,4 @@
-import { COURSES } from './../../../../server/db-data';
+import { COURSES, findLessonsForCourse } from './../../../../server/db-data';
 import { CoursesService } from './courses.service';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -79,5 +79,25 @@ describe(`${CoursesService.name}`, () => {
     expect(req.request.method).toBe('PUT');
     expect(req.request.body.titles.description).toBe(changes.titles.description);
     req.flush('Save course failed', { status: 500, statusText: 'Internal server error'});
+  });
+
+  it('should find a list of lessons', () => {
+    coursesService.findLessons(12).subscribe(lessons => {
+      expect(lessons).toBeTruthy();
+      expect(lessons.length).toBe(3);
+    });
+
+    const req = httpTestingController.expectOne(r => r.url === '/api/lessons',
+      `Wrong URL for ${coursesService.findLessons.name}`);
+    expect(req.request.method).toBe('GET');
+    expect(req.request.params.get('courseId')).toBe('12');
+    expect(req.request.params.get('filter')).toBe('');
+    expect(req.request.params.get('sortOrder')).toBe('asc');
+    expect(req.request.params.get('pageNumber')).toBe('0');
+    expect(req.request.params.get('pageSize')).toBe('3');
+
+    req.flush({
+      payload: findLessonsForCourse(12).slice(0, 3)
+    });
   });
 });
