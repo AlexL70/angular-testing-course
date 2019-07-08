@@ -2,7 +2,7 @@ import { CalculatorService } from './calculator.service';
 import { LoggerService } from './logger.service';
 import { TestBed } from '@angular/core/testing';
 
-describe('Calculator Service', () => {
+describe(`${CalculatorService.name}`, () => {
   let loggerSpy: LoggerService;
   let calculator: CalculatorService;
 
