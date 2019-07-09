@@ -11,24 +11,31 @@ import {setupCourses} from '../common/setup-test-data';
 
 
 
-describe('CoursesCardListComponent', () => {
+describe(`${CoursesCardListComponent.name}`, () => {
 
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        CoursesCardListComponent
+      ]
+    });
+  });
 
-  it("should create the component", () => {
+  it('should create the component', () => {
 
    pending();
 
   });
 
 
-  it("should display the course list", () => {
+  it('should display the course list', () => {
 
     pending();
 
   });
 
 
-  it("should display the first course", () => {
+  it('should display the first course', () => {
 
       pending();
 
