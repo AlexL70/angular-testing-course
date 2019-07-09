@@ -12,19 +12,20 @@ import {setupCourses} from '../common/setup-test-data';
 
 
 describe(`${CoursesCardListComponent.name}`, () => {
+  let component: CoursesCardListComponent;
+  let fixture: ComponentFixture<CoursesCardListComponent>;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CoursesCardListComponent
-      ]
+      imports: [CoursesModule]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(CoursesCardListComponent);
+      component = fixture.componentInstance;
     });
-  });
+  }));
 
   it('should create the component', () => {
-
-   pending();
-
+    expect(component).toBeTruthy();
   });
 
 
