@@ -38,9 +38,15 @@ describe(`${CoursesCardListComponent.name}`, () => {
 
 
   it('should display the first course', () => {
-
-      pending();
-
+    component.courses = setupCourses();
+    fixture.detectChanges();
+    const course = component.courses[0];
+    const card = debugElement.query(By.css('.course-card:first-child'));
+    expect(card).toBeTruthy('Could not find the first course card');
+    const title = card.query(By.css('mat-card-title'));
+    expect(title.nativeElement.textContent).toBe(course.titles.description);
+    const image = card.query(By.css('img'));
+    expect(image.nativeElement.src).toBe(course.iconUrl);
   });
 
 
