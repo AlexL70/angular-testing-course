@@ -8,9 +8,6 @@ import {sortCoursesBySeqNo} from '../home/sort-course-by-seq';
 import {Course} from '../model/course';
 import {setupCourses} from '../common/setup-test-data';
 
-
-
-
 describe(`${CoursesCardListComponent.name}`, () => {
   let component: CoursesCardListComponent;
   let fixture: ComponentFixture<CoursesCardListComponent>;
@@ -33,6 +30,7 @@ describe(`${CoursesCardListComponent.name}`, () => {
 
   it('should display the course list', () => {
     component.courses = setupCourses();
+    fixture.detectChanges();
     const cards = debugElement.queryAll(By.css('.course-card'));
     expect(cards).toBeTruthy('Could not find cards');
     expect(cards.length).toBe(component.courses.length, 'Unexpected number of courses.');
