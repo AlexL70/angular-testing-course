@@ -18,6 +18,8 @@ describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let component: HomeComponent;
   let el: DebugElement;
+  let coursesService: any;
+  const beginnerCourses = setupCourses().filter(c => c.category === 'BEGINNER');
 
   beforeEach(async(() => {
     const coursesServiceSpy = jasmine.createSpyObj(CoursesService.name,
@@ -35,25 +37,25 @@ describe('HomeComponent', () => {
       fixture = TestBed.createComponent(HomeComponent);
       component = fixture.componentInstance;
       el = fixture.debugElement;
+      coursesService = TestBed.get(CoursesService);
     });
   }));
 
   it('should create the component', () => {
-
     expect(component).toBeTruthy();
-
   });
 
-
   it('should display only beginner courses', () => {
-    pending();
+    coursesService.findAllCourses.and.returnValue(of(beginnerCourses));
+    fixture.detectChanges();
+    const tabs = el.queryAll(By.css('.mat-tab-label'));
+    expect(tabs.length).toBe(1, 'Unexpected number of tabs found');
   });
 
 
   it('should display only advanced courses', () => {
       pending();
   });
-
 
   it('should display both tabs', () => {
     pending();
@@ -63,7 +65,6 @@ describe('HomeComponent', () => {
   it('should display advanced courses when tab clicked', () => {
     pending();
   });
-
 });
 
 
